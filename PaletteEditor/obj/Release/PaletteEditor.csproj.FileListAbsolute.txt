@@ -1,0 +1,13 @@
+D:\Projects\MDLib\PaletteEditor\obj\Release\ResolveAssemblyReference.cache
+D:\Projects\MDLib\PaletteEditor\obj\Release\com.huguesjohnson.PaletteEditor.PaletteEditorForm.resources
+D:\Projects\MDLib\PaletteEditor\obj\Release\PaletteEditor.dll
+D:\Projects\MDLib\PaletteEditor\bin\Release\PaletteEditor.dll
+D:\Projects\MDLib\PaletteEditor\bin\Release\MegaDriveIO.dll
+D:\Projects\MDLib\PaletteEditor\obj\Release\GenerateResource.read.1.tlog
+D:\Projects\MDLib\PaletteEditor\obj\Release\GenerateResource.write.1.tlog
+E:\aridia_2.2\MDLib\PaletteEditor\bin\Release\PaletteEditor.dll
+E:\aridia_2.2\MDLib\PaletteEditor\bin\Release\MegaDriveIO.dll
+E:\aridia_2.2\MDLib\PaletteEditor\obj\Release\PaletteEditor.csprojResolveAssemblyReference.cache
+E:\aridia_2.2\MDLib\PaletteEditor\obj\Release\com.huguesjohnson.PaletteEditor.PaletteEditorForm.resources
+E:\aridia_2.2\MDLib\PaletteEditor\obj\Release\PaletteEditor.csproj.GenerateResource.Cache
+E:\aridia_2.2\MDLib\PaletteEditor\obj\Release\PaletteEditor.dll

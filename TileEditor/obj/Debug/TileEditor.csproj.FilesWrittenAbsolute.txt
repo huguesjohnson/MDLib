@@ -1,0 +1,8 @@
+/media/hugues/Kakariko Village/Projects/MDLib/TileEditor/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/media/hugues/Kakariko Village/Projects/MDLib/TileEditor/obj/Debug/com.huguesjohnson.TileEditor.TileEditorForm.resources
+/media/hugues/Kakariko Village/Projects/MDLib/TileEditor/bin/Debug/TileEditor.dll.mdb
+/media/hugues/Kakariko Village/Projects/MDLib/TileEditor/bin/Debug/TileEditor.dll
+/media/hugues/Kakariko Village/Projects/MDLib/TileEditor/obj/Debug/TileEditor.dll
+/media/hugues/Kakariko Village/Projects/MDLib/TileEditor/obj/Debug/TileEditor.dll.mdb
+/media/hugues/Kakariko Village/Projects/MDLib/TileEditor/bin/Debug/MegaDriveIO.dll
+/media/hugues/Kakariko Village/Projects/MDLib/TileEditor/bin/Debug/MegaDriveIO.dll.mdb

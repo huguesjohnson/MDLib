@@ -1,0 +1,17 @@
+D:\Projects\MDLib\IPS\IPSCreator\bin\Release\IPSCreator.exe
+D:\Projects\MDLib\IPS\IPSCreator\bin\Release\IPSCreator.pdb
+D:\Projects\MDLib\IPS\IPSCreator\obj\Release\ResolveAssemblyReference.cache
+D:\Projects\MDLib\IPS\IPSCreator\obj\Release\IPSCreator.exe
+D:\Projects\MDLib\IPS\IPSCreator\obj\Release\IPSCreator.pdb
+D:\Projects\MDLib\IPS\IPSCreator\obj\Release\GenerateResource.read.1.tlog
+D:\Projects\MDLib\IPS\IPSCreator\obj\Release\GenerateResource.write.1.tlog
+D:\Projects\MDLib\IPS\IPSCreator\obj\Release\com.huguesjohnson.IPSCreator.IPSCreatorForm.resources
+D:\Projects\MDLib\IPS\IPSCreator\obj\Release\com.huguesjohnson.IPSCreator.Properties.Resources.resources
+E:\aridia_2.2\MDLib\IPS\IPSCreator\bin\Release\IPSCreator.exe
+E:\aridia_2.2\MDLib\IPS\IPSCreator\bin\Release\IPSCreator.pdb
+E:\aridia_2.2\MDLib\IPS\IPSCreator\obj\Release\IPSCreator.csprojResolveAssemblyReference.cache
+E:\aridia_2.2\MDLib\IPS\IPSCreator\obj\Release\com.huguesjohnson.IPSCreator.IPSCreatorForm.resources
+E:\aridia_2.2\MDLib\IPS\IPSCreator\obj\Release\com.huguesjohnson.IPSCreator.Properties.Resources.resources
+E:\aridia_2.2\MDLib\IPS\IPSCreator\obj\Release\IPSCreator.csproj.GenerateResource.Cache
+E:\aridia_2.2\MDLib\IPS\IPSCreator\obj\Release\IPSCreator.exe
+E:\aridia_2.2\MDLib\IPS\IPSCreator\obj\Release\IPSCreator.pdb

@@ -1,0 +1,13 @@
+D:\Projects\MDLib\TileEditor\obj\Release\ResolveAssemblyReference.cache
+D:\Projects\MDLib\TileEditor\obj\Release\com.huguesjohnson.TileEditor.TileEditorForm.resources
+D:\Projects\MDLib\TileEditor\obj\Release\TileEditor.dll
+D:\Projects\MDLib\TileEditor\bin\Release\TileEditor.dll
+D:\Projects\MDLib\TileEditor\bin\Release\MegaDriveIO.dll
+D:\Projects\MDLib\TileEditor\obj\Release\GenerateResource.read.1.tlog
+D:\Projects\MDLib\TileEditor\obj\Release\GenerateResource.write.1.tlog
+E:\aridia_2.2\MDLib\TileEditor\bin\Release\TileEditor.dll
+E:\aridia_2.2\MDLib\TileEditor\bin\Release\MegaDriveIO.dll
+E:\aridia_2.2\MDLib\TileEditor\obj\Release\TileEditor.csprojResolveAssemblyReference.cache
+E:\aridia_2.2\MDLib\TileEditor\obj\Release\com.huguesjohnson.TileEditor.TileEditorForm.resources
+E:\aridia_2.2\MDLib\TileEditor\obj\Release\TileEditor.csproj.GenerateResource.Cache
+E:\aridia_2.2\MDLib\TileEditor\obj\Release\TileEditor.dll

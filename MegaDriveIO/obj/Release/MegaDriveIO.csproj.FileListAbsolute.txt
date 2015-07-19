@@ -1,5 +1,0 @@
-D:\Projects\MDLib\MegaDriveIO\bin\Release\MegaDriveIO.dll
-D:\Projects\MDLib\MegaDriveIO\obj\Release\ResolveAssemblyReference.cache
-D:\Projects\MDLib\MegaDriveIO\obj\Release\MegaDriveIO.dll
-E:\aridia_2.2\MDLib\MegaDriveIO\bin\Release\MegaDriveIO.dll
-E:\aridia_2.2\MDLib\MegaDriveIO\obj\Release\MegaDriveIO.dll

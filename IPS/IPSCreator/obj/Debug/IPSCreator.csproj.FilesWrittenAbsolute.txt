@@ -1,7 +1,0 @@
-/media/hugues/Kakariko Village/Projects/MDLib/IPS/IPSCreator/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
-/media/hugues/Kakariko Village/Projects/MDLib/IPS/IPSCreator/obj/Debug/com.huguesjohnson.IPSCreator.IPSCreatorForm.resources
-/media/hugues/Kakariko Village/Projects/MDLib/IPS/IPSCreator/obj/Debug/com.huguesjohnson.IPSCreator.Properties.Resources.resources
-/media/hugues/Kakariko Village/Projects/MDLib/IPS/IPSCreator/bin/Debug/IPSCreator.exe.mdb
-/media/hugues/Kakariko Village/Projects/MDLib/IPS/IPSCreator/bin/Debug/IPSCreator.exe
-/media/hugues/Kakariko Village/Projects/MDLib/IPS/IPSCreator/obj/Debug/IPSCreator.exe
-/media/hugues/Kakariko Village/Projects/MDLib/IPS/IPSCreator/obj/Debug/IPSCreator.exe.mdb

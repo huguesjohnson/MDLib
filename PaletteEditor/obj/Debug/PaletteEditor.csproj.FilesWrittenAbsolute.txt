@@ -1,8 +1,0 @@
-/media/hugues/Kakariko Village/Projects/MDLib/PaletteEditor/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
-/media/hugues/Kakariko Village/Projects/MDLib/PaletteEditor/obj/Debug/com.huguesjohnson.PaletteEditor.PaletteEditorForm.resources
-/media/hugues/Kakariko Village/Projects/MDLib/PaletteEditor/bin/Debug/PaletteEditor.dll.mdb
-/media/hugues/Kakariko Village/Projects/MDLib/PaletteEditor/bin/Debug/PaletteEditor.dll
-/media/hugues/Kakariko Village/Projects/MDLib/PaletteEditor/obj/Debug/PaletteEditor.dll
-/media/hugues/Kakariko Village/Projects/MDLib/PaletteEditor/obj/Debug/PaletteEditor.dll.mdb
-/media/hugues/Kakariko Village/Projects/MDLib/PaletteEditor/bin/Debug/MegaDriveIO.dll
-/media/hugues/Kakariko Village/Projects/MDLib/PaletteEditor/bin/Debug/MegaDriveIO.dll.mdb

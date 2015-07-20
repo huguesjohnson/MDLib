@@ -2,8 +2,8 @@
 MegaDriveIO: Utilities to read/write a Mega Drive binary ROM image
 Originally created for Aridia: Phantasy Star III ROM Editor
 Modified for Eisfrei: Herzog Zwei ROM Editor
-Modified for Black Egg: Starflight for Sega Genesis ROM Editor
-Copyright (c) 2007-2013 Hugues Johnson
+Modified for Black Egg: Starflight for Sega Genesis ROM Editor (unfinished project)
+Copyright (c) 2007-2015 Hugues Johnson
 
 MegaDriveIO is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2 
@@ -26,7 +26,7 @@ namespace com.huguesjohnson.MegaDriveIO
 	/// <summary>
 	/// Used to read/write a MegaDrive binary ROM image.
 	/// </summary>
-	public class MDBinaryRomIO:IDisposable
+	public class MDBinaryRomIO:IDisposable,IMegaDriveIO
 	{
 		private const int CHECKSUM_ADDRESS=398;
 		private const int CHECKSUM_CALC_START=512;
@@ -58,7 +58,7 @@ namespace com.huguesjohnson.MegaDriveIO
 		/// </summary>
 		/// <param name="filePath">The full path to the file to edit.</param>
 		public MDBinaryRomIO(String filePath)
-		{ 
+		{
 			FileStream romFileStream=File.Open(filePath,FileMode.Open,FileAccess.ReadWrite,FileShare.Read);
 			this.writer=new BinaryWriter(romFileStream);
 			this.reader=new BinaryReader(romFileStream);

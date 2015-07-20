@@ -88,6 +88,7 @@
     <Compile Include="DataRangeCollection.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IMegaDriveIO.cs" />
     <Compile Include="LookupValue.cs">
       <SubType>Code</SubType>
     </Compile>

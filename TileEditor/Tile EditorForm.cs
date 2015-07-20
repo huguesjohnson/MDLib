@@ -20,6 +20,7 @@ using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Data;
 
@@ -60,7 +61,7 @@ namespace com.huguesjohnson.TileEditor
 
 		private int startAddress;
 		private int endAddress;
-		private MDBinaryRomIO romIO;
+		private IMegaDriveIO romIO;
 		private MDTile[] tiles;
 		private int selectedTileIndex;
 		private int selectedPixelX;
@@ -94,7 +95,7 @@ namespace com.huguesjohnson.TileEditor
 		/// <param name="romIO">The Mega Drive ROM IO to read/write.</param>
 		/// <param name="startAddress">The starting address of the tiles to edit.</param>
 		/// <param name="endAddress">The end address of the tiles to edit.</param>
-		public TileEditorForm(MDBinaryRomIO romIO,int startAddress,int endAddress)
+		public TileEditorForm(IMegaDriveIO romIO,int startAddress,int endAddress)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -132,7 +133,7 @@ namespace com.huguesjohnson.TileEditor
 		/// <param name="startAddress">The starting address of the tiles to edit.</param>
 		/// <param name="endAddress">The end address of the tiles to edit.</param>
 		/// <param name="romPalettes">The collection of ROM palettes to load into the combo box.</param>
-		public TileEditorForm(MDBinaryRomIO romIO,int startAddress,int endAddress,LookupValueCollection romPalettes) : this(romIO,startAddress,endAddress)
+		public TileEditorForm(IMegaDriveIO romIO,int startAddress,int endAddress,LookupValueCollection romPalettes) : this(romIO,startAddress,endAddress)
 		{
 			LookupValue[] allItems=romPalettes.getAll();
 			int size=allItems.Length;
@@ -166,493 +167,513 @@ namespace com.huguesjohnson.TileEditor
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(TileEditorForm));
-			this.groupBoxRomBrowser = new System.Windows.Forms.GroupBox();
-			this.textBoxEndAddress = new System.Windows.Forms.TextBox();
-			this.textBoxStartAddress = new System.Windows.Forms.TextBox();
-			this.pictureBoxBrowser = new System.Windows.Forms.PictureBox();
-			this.labelEndAddress = new System.Windows.Forms.Label();
-			this.labelStartingAddress = new System.Windows.Forms.Label();
-			this.groupBoxSelectedTile = new System.Windows.Forms.GroupBox();
-			this.comboBoxPaletteEntry = new System.Windows.Forms.ComboBox();
-			this.labelPaletteEntry = new System.Windows.Forms.Label();
-			this.labelPixelXY = new System.Windows.Forms.Label();
-			this.labelPixel = new System.Windows.Forms.Label();
-			this.pictureBoxSelectedTile = new System.Windows.Forms.PictureBox();
-			this.groupBoxPalette = new System.Windows.Forms.GroupBox();
-			this.buttonPalette0 = new System.Windows.Forms.Button();
-			this.buttonGridLines = new System.Windows.Forms.Button();
-			this.buttonPalette15 = new System.Windows.Forms.Button();
-			this.buttonPalette14 = new System.Windows.Forms.Button();
-			this.buttonPalette13 = new System.Windows.Forms.Button();
-			this.buttonPalette12 = new System.Windows.Forms.Button();
-			this.buttonPalette11 = new System.Windows.Forms.Button();
-			this.buttonPalette10 = new System.Windows.Forms.Button();
-			this.buttonPalette9 = new System.Windows.Forms.Button();
-			this.buttonPalette8 = new System.Windows.Forms.Button();
-			this.buttonPalette7 = new System.Windows.Forms.Button();
-			this.buttonPalette6 = new System.Windows.Forms.Button();
-			this.buttonPalette5 = new System.Windows.Forms.Button();
-			this.buttonPalette4 = new System.Windows.Forms.Button();
-			this.buttonPalette3 = new System.Windows.Forms.Button();
-			this.buttonPalette2 = new System.Windows.Forms.Button();
-			this.buttonPalette1 = new System.Windows.Forms.Button();
-			this.labelPalette = new System.Windows.Forms.Label();
-			this.colorDialog = new System.Windows.Forms.ColorDialog();
-			this.contextMenuSelectedTile = new System.Windows.Forms.ContextMenu();
-			this.buttonExit = new System.Windows.Forms.Button();
-			this.buttonCancel = new System.Windows.Forms.Button();
-			this.labelPalettes = new System.Windows.Forms.Label();
-			this.comboBoxPalettes = new System.Windows.Forms.ComboBox();
-			this.groupBoxRomBrowser.SuspendLayout();
-			this.groupBoxSelectedTile.SuspendLayout();
-			this.groupBoxPalette.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// groupBoxRomBrowser
-			// 
-			this.groupBoxRomBrowser.Controls.Add(this.textBoxEndAddress);
-			this.groupBoxRomBrowser.Controls.Add(this.textBoxStartAddress);
-			this.groupBoxRomBrowser.Controls.Add(this.pictureBoxBrowser);
-			this.groupBoxRomBrowser.Controls.Add(this.labelEndAddress);
-			this.groupBoxRomBrowser.Controls.Add(this.labelStartingAddress);
-			this.groupBoxRomBrowser.Location = new System.Drawing.Point(8, 16);
-			this.groupBoxRomBrowser.Name = "groupBoxRomBrowser";
-			this.groupBoxRomBrowser.Size = new System.Drawing.Size(416, 184);
-			this.groupBoxRomBrowser.TabIndex = 0;
-			this.groupBoxRomBrowser.TabStop = false;
-			this.groupBoxRomBrowser.Text = "ROM Browser";
-			// 
-			// textBoxEndAddress
-			// 
-			this.textBoxEndAddress.Location = new System.Drawing.Point(304, 24);
-			this.textBoxEndAddress.Name = "textBoxEndAddress";
-			this.textBoxEndAddress.ReadOnly = true;
-			this.textBoxEndAddress.Size = new System.Drawing.Size(96, 20);
-			this.textBoxEndAddress.TabIndex = 4;
-			this.textBoxEndAddress.Text = "";
-			// 
-			// textBoxStartAddress
-			// 
-			this.textBoxStartAddress.Location = new System.Drawing.Point(104, 24);
-			this.textBoxStartAddress.Name = "textBoxStartAddress";
-			this.textBoxStartAddress.ReadOnly = true;
-			this.textBoxStartAddress.Size = new System.Drawing.Size(96, 20);
-			this.textBoxStartAddress.TabIndex = 3;
-			this.textBoxStartAddress.Text = "";
-			// 
-			// pictureBoxBrowser
-			// 
-			this.pictureBoxBrowser.BackColor = System.Drawing.Color.White;
-			this.pictureBoxBrowser.Location = new System.Drawing.Point(16, 48);
-			this.pictureBoxBrowser.Name = "pictureBoxBrowser";
-			this.pictureBoxBrowser.Size = new System.Drawing.Size(384, 128);
-			this.pictureBoxBrowser.TabIndex = 2;
-			this.pictureBoxBrowser.TabStop = false;
-			this.pictureBoxBrowser.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxBrowser_Paint);
-			this.pictureBoxBrowser.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxBrowser_MouseUp);
-			// 
-			// labelEndAddress
-			// 
-			this.labelEndAddress.Location = new System.Drawing.Point(216, 24);
-			this.labelEndAddress.Name = "labelEndAddress";
-			this.labelEndAddress.Size = new System.Drawing.Size(80, 20);
-			this.labelEndAddress.TabIndex = 1;
-			this.labelEndAddress.Text = "End Address:";
-			this.labelEndAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelStartingAddress
-			// 
-			this.labelStartingAddress.Location = new System.Drawing.Point(16, 24);
-			this.labelStartingAddress.Name = "labelStartingAddress";
-			this.labelStartingAddress.Size = new System.Drawing.Size(80, 20);
-			this.labelStartingAddress.TabIndex = 0;
-			this.labelStartingAddress.Text = "Start Address:";
-			this.labelStartingAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBoxSelectedTile
-			// 
-			this.groupBoxSelectedTile.Controls.Add(this.comboBoxPaletteEntry);
-			this.groupBoxSelectedTile.Controls.Add(this.labelPaletteEntry);
-			this.groupBoxSelectedTile.Controls.Add(this.labelPixelXY);
-			this.groupBoxSelectedTile.Controls.Add(this.labelPixel);
-			this.groupBoxSelectedTile.Controls.Add(this.pictureBoxSelectedTile);
-			this.groupBoxSelectedTile.Location = new System.Drawing.Point(432, 16);
-			this.groupBoxSelectedTile.Name = "groupBoxSelectedTile";
-			this.groupBoxSelectedTile.Size = new System.Drawing.Size(160, 216);
-			this.groupBoxSelectedTile.TabIndex = 1;
-			this.groupBoxSelectedTile.TabStop = false;
-			this.groupBoxSelectedTile.Text = "Selected Tile";
-			// 
-			// comboBoxPaletteEntry
-			// 
-			this.comboBoxPaletteEntry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxPaletteEntry.Items.AddRange(new object[] {
-																	  "0",
-																	  "1",
-																	  "2",
-																	  "3",
-																	  "4",
-																	  "5",
-																	  "6",
-																	  "7",
-																	  "8",
-																	  "9",
-																	  "10",
-																	  "11",
-																	  "12",
-																	  "13",
-																	  "14",
-																	  "15"});
-			this.comboBoxPaletteEntry.Location = new System.Drawing.Point(72, 184);
-			this.comboBoxPaletteEntry.Name = "comboBoxPaletteEntry";
-			this.comboBoxPaletteEntry.Size = new System.Drawing.Size(72, 21);
-			this.comboBoxPaletteEntry.TabIndex = 19;
-			// 
-			// labelPaletteEntry
-			// 
-			this.labelPaletteEntry.Location = new System.Drawing.Point(16, 184);
-			this.labelPaletteEntry.Name = "labelPaletteEntry";
-			this.labelPaletteEntry.Size = new System.Drawing.Size(64, 20);
-			this.labelPaletteEntry.TabIndex = 3;
-			this.labelPaletteEntry.Text = "Pen Color:";
-			this.labelPaletteEntry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelPixelXY
-			// 
-			this.labelPixelXY.Location = new System.Drawing.Point(72, 160);
-			this.labelPixelXY.Name = "labelPixelXY";
-			this.labelPixelXY.Size = new System.Drawing.Size(72, 16);
-			this.labelPixelXY.TabIndex = 2;
-			// 
-			// labelPixel
-			// 
-			this.labelPixel.Location = new System.Drawing.Point(16, 160);
-			this.labelPixel.Name = "labelPixel";
-			this.labelPixel.Size = new System.Drawing.Size(64, 16);
-			this.labelPixel.TabIndex = 1;
-			this.labelPixel.Text = "Pixel Data:";
-			this.labelPixel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// pictureBoxSelectedTile
-			// 
-			this.pictureBoxSelectedTile.BackColor = System.Drawing.Color.White;
-			this.pictureBoxSelectedTile.Cursor = System.Windows.Forms.Cursors.Cross;
-			this.pictureBoxSelectedTile.Location = new System.Drawing.Point(16, 24);
-			this.pictureBoxSelectedTile.Name = "pictureBoxSelectedTile";
-			this.pictureBoxSelectedTile.Size = new System.Drawing.Size(128, 128);
-			this.pictureBoxSelectedTile.TabIndex = 0;
-			this.pictureBoxSelectedTile.TabStop = false;
-			this.pictureBoxSelectedTile.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxSelectedTile_Paint);
-			this.pictureBoxSelectedTile.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxSelectedTile_MouseUp);
-			this.pictureBoxSelectedTile.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxSelectedTile_MouseMove);
-			// 
-			// groupBoxPalette
-			// 
-			this.groupBoxPalette.Controls.Add(this.comboBoxPalettes);
-			this.groupBoxPalette.Controls.Add(this.labelPalettes);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette0);
-			this.groupBoxPalette.Controls.Add(this.buttonGridLines);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette15);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette14);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette13);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette12);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette11);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette10);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette9);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette8);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette7);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette6);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette5);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette4);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette3);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette2);
-			this.groupBoxPalette.Controls.Add(this.buttonPalette1);
-			this.groupBoxPalette.Controls.Add(this.labelPalette);
-			this.groupBoxPalette.Location = new System.Drawing.Point(8, 208);
-			this.groupBoxPalette.Name = "groupBoxPalette";
-			this.groupBoxPalette.Size = new System.Drawing.Size(416, 144);
-			this.groupBoxPalette.TabIndex = 2;
-			this.groupBoxPalette.TabStop = false;
-			this.groupBoxPalette.Text = "Palette";
-			// 
-			// buttonPalette0
-			// 
-			this.buttonPalette0.BackColor = System.Drawing.Color.Black;
-			this.buttonPalette0.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette0.ForeColor = System.Drawing.Color.White;
-			this.buttonPalette0.Location = new System.Drawing.Point(16, 16);
-			this.buttonPalette0.Name = "buttonPalette0";
-			this.buttonPalette0.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette0.TabIndex = 1;
-			this.buttonPalette0.Text = "0";
-			this.buttonPalette0.Click += new System.EventHandler(this.buttonPalette0_Click);
-			this.buttonPalette0.BackColorChanged += new System.EventHandler(this.buttonPalette0_BackColorChanged);
-			// 
-			// buttonGridLines
-			// 
-			this.buttonGridLines.BackColor = System.Drawing.Color.White;
-			this.buttonGridLines.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonGridLines.ForeColor = System.Drawing.Color.Black;
-			this.buttonGridLines.Location = new System.Drawing.Point(280, 48);
-			this.buttonGridLines.Name = "buttonGridLines";
-			this.buttonGridLines.Size = new System.Drawing.Size(120, 32);
-			this.buttonGridLines.TabIndex = 18;
-			this.buttonGridLines.Text = "Gridlines";
-			this.buttonGridLines.Click += new System.EventHandler(this.buttonGridLines_Click);
-			// 
-			// buttonPalette15
-			// 
-			this.buttonPalette15.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(192)), ((System.Byte)(0)), ((System.Byte)(192)));
-			this.buttonPalette15.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette15.Location = new System.Drawing.Point(240, 48);
-			this.buttonPalette15.Name = "buttonPalette15";
-			this.buttonPalette15.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette15.TabIndex = 16;
-			this.buttonPalette15.Text = "15";
-			this.buttonPalette15.Click += new System.EventHandler(this.buttonPalette15_Click);
-			this.buttonPalette15.BackColorChanged += new System.EventHandler(this.buttonPalette15_BackColorChanged);
-			// 
-			// buttonPalette14
-			// 
-			this.buttonPalette14.BackColor = System.Drawing.Color.Blue;
-			this.buttonPalette14.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette14.Location = new System.Drawing.Point(208, 48);
-			this.buttonPalette14.Name = "buttonPalette14";
-			this.buttonPalette14.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette14.TabIndex = 15;
-			this.buttonPalette14.Text = "14";
-			this.buttonPalette14.Click += new System.EventHandler(this.buttonPalette14_Click);
-			this.buttonPalette14.BackColorChanged += new System.EventHandler(this.buttonPalette14_BackColorChanged);
-			// 
-			// buttonPalette13
-			// 
-			this.buttonPalette13.BackColor = System.Drawing.Color.Teal;
-			this.buttonPalette13.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette13.Location = new System.Drawing.Point(176, 48);
-			this.buttonPalette13.Name = "buttonPalette13";
-			this.buttonPalette13.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette13.TabIndex = 14;
-			this.buttonPalette13.Text = "13";
-			this.buttonPalette13.Click += new System.EventHandler(this.buttonPalette13_Click);
-			this.buttonPalette13.BackColorChanged += new System.EventHandler(this.buttonPalette13_BackColorChanged);
-			// 
-			// buttonPalette12
-			// 
-			this.buttonPalette12.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(0)), ((System.Byte)(192)), ((System.Byte)(0)));
-			this.buttonPalette12.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette12.Location = new System.Drawing.Point(144, 48);
-			this.buttonPalette12.Name = "buttonPalette12";
-			this.buttonPalette12.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette12.TabIndex = 13;
-			this.buttonPalette12.Text = "12";
-			this.buttonPalette12.Click += new System.EventHandler(this.buttonPalette12_Click);
-			this.buttonPalette12.BackColorChanged += new System.EventHandler(this.buttonPalette12_BackColorChanged);
-			// 
-			// buttonPalette11
-			// 
-			this.buttonPalette11.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(192)), ((System.Byte)(192)), ((System.Byte)(0)));
-			this.buttonPalette11.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette11.Location = new System.Drawing.Point(112, 48);
-			this.buttonPalette11.Name = "buttonPalette11";
-			this.buttonPalette11.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette11.TabIndex = 12;
-			this.buttonPalette11.Text = "11";
-			this.buttonPalette11.Click += new System.EventHandler(this.buttonPalette11_Click);
-			this.buttonPalette11.BackColorChanged += new System.EventHandler(this.buttonPalette11_BackColorChanged);
-			// 
-			// buttonPalette10
-			// 
-			this.buttonPalette10.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(255)), ((System.Byte)(128)), ((System.Byte)(0)));
-			this.buttonPalette10.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette10.Location = new System.Drawing.Point(80, 48);
-			this.buttonPalette10.Name = "buttonPalette10";
-			this.buttonPalette10.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette10.TabIndex = 11;
-			this.buttonPalette10.Text = "10";
-			this.buttonPalette10.Click += new System.EventHandler(this.buttonPalette10_Click);
-			this.buttonPalette10.BackColorChanged += new System.EventHandler(this.buttonPalette10_BackColorChanged);
-			// 
-			// buttonPalette9
-			// 
-			this.buttonPalette9.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(192)), ((System.Byte)(0)), ((System.Byte)(0)));
-			this.buttonPalette9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette9.Location = new System.Drawing.Point(48, 48);
-			this.buttonPalette9.Name = "buttonPalette9";
-			this.buttonPalette9.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette9.TabIndex = 10;
-			this.buttonPalette9.Text = "9";
-			this.buttonPalette9.Click += new System.EventHandler(this.buttonPalette9_Click);
-			this.buttonPalette9.BackColorChanged += new System.EventHandler(this.buttonPalette9_BackColorChanged);
-			// 
-			// buttonPalette8
-			// 
-			this.buttonPalette8.BackColor = System.Drawing.Color.Silver;
-			this.buttonPalette8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette8.Location = new System.Drawing.Point(16, 48);
-			this.buttonPalette8.Name = "buttonPalette8";
-			this.buttonPalette8.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette8.TabIndex = 9;
-			this.buttonPalette8.Text = "8";
-			this.buttonPalette8.Click += new System.EventHandler(this.buttonPalette8_Click);
-			this.buttonPalette8.BackColorChanged += new System.EventHandler(this.buttonPalette8_BackColorChanged);
-			// 
-			// buttonPalette7
-			// 
-			this.buttonPalette7.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(255)), ((System.Byte)(192)), ((System.Byte)(255)));
-			this.buttonPalette7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette7.Location = new System.Drawing.Point(240, 16);
-			this.buttonPalette7.Name = "buttonPalette7";
-			this.buttonPalette7.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette7.TabIndex = 8;
-			this.buttonPalette7.Text = "7";
-			this.buttonPalette7.Click += new System.EventHandler(this.buttonPalette7_Click);
-			this.buttonPalette7.BackColorChanged += new System.EventHandler(this.buttonPalette7_BackColorChanged);
-			// 
-			// buttonPalette6
-			// 
-			this.buttonPalette6.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(192)), ((System.Byte)(192)), ((System.Byte)(255)));
-			this.buttonPalette6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette6.Location = new System.Drawing.Point(208, 16);
-			this.buttonPalette6.Name = "buttonPalette6";
-			this.buttonPalette6.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette6.TabIndex = 7;
-			this.buttonPalette6.Text = "6";
-			this.buttonPalette6.Click += new System.EventHandler(this.buttonPalette6_Click);
-			this.buttonPalette6.BackColorChanged += new System.EventHandler(this.buttonPalette6_BackColorChanged);
-			// 
-			// buttonPalette5
-			// 
-			this.buttonPalette5.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(192)), ((System.Byte)(255)), ((System.Byte)(255)));
-			this.buttonPalette5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette5.Location = new System.Drawing.Point(176, 16);
-			this.buttonPalette5.Name = "buttonPalette5";
-			this.buttonPalette5.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette5.TabIndex = 6;
-			this.buttonPalette5.Text = "5";
-			this.buttonPalette5.Click += new System.EventHandler(this.buttonPalette5_Click);
-			this.buttonPalette5.BackColorChanged += new System.EventHandler(this.buttonPalette5_BackColorChanged);
-			// 
-			// buttonPalette4
-			// 
-			this.buttonPalette4.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(192)), ((System.Byte)(255)), ((System.Byte)(192)));
-			this.buttonPalette4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette4.Location = new System.Drawing.Point(144, 16);
-			this.buttonPalette4.Name = "buttonPalette4";
-			this.buttonPalette4.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette4.TabIndex = 5;
-			this.buttonPalette4.Text = "4";
-			this.buttonPalette4.Click += new System.EventHandler(this.buttonPalette4_Click);
-			this.buttonPalette4.BackColorChanged += new System.EventHandler(this.buttonPalette4_BackColorChanged);
-			// 
-			// buttonPalette3
-			// 
-			this.buttonPalette3.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(255)), ((System.Byte)(255)), ((System.Byte)(192)));
-			this.buttonPalette3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette3.Location = new System.Drawing.Point(112, 16);
-			this.buttonPalette3.Name = "buttonPalette3";
-			this.buttonPalette3.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette3.TabIndex = 4;
-			this.buttonPalette3.Text = "3";
-			this.buttonPalette3.Click += new System.EventHandler(this.buttonPalette3_Click);
-			this.buttonPalette3.BackColorChanged += new System.EventHandler(this.buttonPalette3_BackColorChanged);
-			// 
-			// buttonPalette2
-			// 
-			this.buttonPalette2.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(255)), ((System.Byte)(224)), ((System.Byte)(192)));
-			this.buttonPalette2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette2.Location = new System.Drawing.Point(80, 16);
-			this.buttonPalette2.Name = "buttonPalette2";
-			this.buttonPalette2.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette2.TabIndex = 3;
-			this.buttonPalette2.Text = "2";
-			this.buttonPalette2.Click += new System.EventHandler(this.buttonPalette2_Click);
-			this.buttonPalette2.BackColorChanged += new System.EventHandler(this.buttonPalette2_BackColorChanged);
-			// 
-			// buttonPalette1
-			// 
-			this.buttonPalette1.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(255)), ((System.Byte)(192)), ((System.Byte)(192)));
-			this.buttonPalette1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonPalette1.Location = new System.Drawing.Point(48, 16);
-			this.buttonPalette1.Name = "buttonPalette1";
-			this.buttonPalette1.Size = new System.Drawing.Size(32, 32);
-			this.buttonPalette1.TabIndex = 2;
-			this.buttonPalette1.Text = "1";
-			this.buttonPalette1.Click += new System.EventHandler(this.buttonPalette1_Click);
-			this.buttonPalette1.BackColorChanged += new System.EventHandler(this.buttonPalette1_BackColorChanged);
-			// 
-			// labelPalette
-			// 
-			this.labelPalette.Location = new System.Drawing.Point(8, 120);
-			this.labelPalette.Name = "labelPalette";
-			this.labelPalette.Size = new System.Drawing.Size(392, 16);
-			this.labelPalette.TabIndex = 0;
-			this.labelPalette.Text = "Palette is for preview purposes, this does not affect what is saved to the ROM";
-			// 
-			// colorDialog
-			// 
-			this.colorDialog.FullOpen = true;
-			// 
-			// buttonExit
-			// 
-			this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonExit.Location = new System.Drawing.Point(432, 280);
-			this.buttonExit.Name = "buttonExit";
-			this.buttonExit.Size = new System.Drawing.Size(168, 32);
-			this.buttonExit.TabIndex = 20;
-			this.buttonExit.Text = "Save All Changes and Close";
-			this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
-			// 
-			// buttonCancel
-			// 
-			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-			this.buttonCancel.Location = new System.Drawing.Point(432, 320);
-			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.Size = new System.Drawing.Size(168, 32);
-			this.buttonCancel.TabIndex = 21;
-			this.buttonCancel.Text = "Cancel All Changes and Close";
-			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-			// 
-			// labelPalettes
-			// 
-			this.labelPalettes.Location = new System.Drawing.Point(16, 88);
-			this.labelPalettes.Name = "labelPalettes";
-			this.labelPalettes.Size = new System.Drawing.Size(112, 21);
-			this.labelPalettes.TabIndex = 19;
-			this.labelPalettes.Text = "Use palette in ROM:";
-			this.labelPalettes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboBoxPalettes
-			// 
-			this.comboBoxPalettes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxPalettes.Enabled = false;
-			this.comboBoxPalettes.Location = new System.Drawing.Point(136, 88);
-			this.comboBoxPalettes.Name = "comboBoxPalettes";
-			this.comboBoxPalettes.Size = new System.Drawing.Size(264, 21);
-			this.comboBoxPalettes.TabIndex = 20;
-			this.comboBoxPalettes.SelectedIndexChanged += new System.EventHandler(this.comboBoxPalettes_SelectedIndexChanged);
-			// 
-			// TileEditorForm
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(602, 359);
-			this.Controls.Add(this.buttonCancel);
-			this.Controls.Add(this.buttonExit);
-			this.Controls.Add(this.groupBoxPalette);
-			this.Controls.Add(this.groupBoxSelectedTile);
-			this.Controls.Add(this.groupBoxRomBrowser);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.Name = "TileEditorForm";
-			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.Text = "Tile Editor 1.1";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.TileEditorForm_Closing);
-			this.Load += new System.EventHandler(this.TileEditorForm_Load);
-			this.groupBoxRomBrowser.ResumeLayout(false);
-			this.groupBoxSelectedTile.ResumeLayout(false);
-			this.groupBoxPalette.ResumeLayout(false);
-			this.ResumeLayout(false);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TileEditorForm));
+            this.groupBoxRomBrowser = new System.Windows.Forms.GroupBox();
+            this.textBoxEndAddress = new System.Windows.Forms.TextBox();
+            this.textBoxStartAddress = new System.Windows.Forms.TextBox();
+            this.pictureBoxBrowser = new System.Windows.Forms.PictureBox();
+            this.labelEndAddress = new System.Windows.Forms.Label();
+            this.labelStartingAddress = new System.Windows.Forms.Label();
+            this.groupBoxSelectedTile = new System.Windows.Forms.GroupBox();
+            this.comboBoxPaletteEntry = new System.Windows.Forms.ComboBox();
+            this.labelPaletteEntry = new System.Windows.Forms.Label();
+            this.labelPixelXY = new System.Windows.Forms.Label();
+            this.labelPixel = new System.Windows.Forms.Label();
+            this.pictureBoxSelectedTile = new System.Windows.Forms.PictureBox();
+            this.groupBoxPalette = new System.Windows.Forms.GroupBox();
+            this.comboBoxPalettes = new System.Windows.Forms.ComboBox();
+            this.labelPalettes = new System.Windows.Forms.Label();
+            this.buttonPalette0 = new System.Windows.Forms.Button();
+            this.buttonGridLines = new System.Windows.Forms.Button();
+            this.buttonPalette15 = new System.Windows.Forms.Button();
+            this.buttonPalette14 = new System.Windows.Forms.Button();
+            this.buttonPalette13 = new System.Windows.Forms.Button();
+            this.buttonPalette12 = new System.Windows.Forms.Button();
+            this.buttonPalette11 = new System.Windows.Forms.Button();
+            this.buttonPalette10 = new System.Windows.Forms.Button();
+            this.buttonPalette9 = new System.Windows.Forms.Button();
+            this.buttonPalette8 = new System.Windows.Forms.Button();
+            this.buttonPalette7 = new System.Windows.Forms.Button();
+            this.buttonPalette6 = new System.Windows.Forms.Button();
+            this.buttonPalette5 = new System.Windows.Forms.Button();
+            this.buttonPalette4 = new System.Windows.Forms.Button();
+            this.buttonPalette3 = new System.Windows.Forms.Button();
+            this.buttonPalette2 = new System.Windows.Forms.Button();
+            this.buttonPalette1 = new System.Windows.Forms.Button();
+            this.labelPalette = new System.Windows.Forms.Label();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.contextMenuSelectedTile = new System.Windows.Forms.ContextMenu();
+            this.buttonExit = new System.Windows.Forms.Button();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.groupBoxRomBrowser.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBrowser)).BeginInit();
+            this.groupBoxSelectedTile.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSelectedTile)).BeginInit();
+            this.groupBoxPalette.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // groupBoxRomBrowser
+            // 
+            this.groupBoxRomBrowser.Controls.Add(this.textBoxEndAddress);
+            this.groupBoxRomBrowser.Controls.Add(this.textBoxStartAddress);
+            this.groupBoxRomBrowser.Controls.Add(this.pictureBoxBrowser);
+            this.groupBoxRomBrowser.Controls.Add(this.labelEndAddress);
+            this.groupBoxRomBrowser.Controls.Add(this.labelStartingAddress);
+            this.groupBoxRomBrowser.Location = new System.Drawing.Point(10, 18);
+            this.groupBoxRomBrowser.Name = "groupBoxRomBrowser";
+            this.groupBoxRomBrowser.Size = new System.Drawing.Size(499, 213);
+            this.groupBoxRomBrowser.TabIndex = 0;
+            this.groupBoxRomBrowser.TabStop = false;
+            this.groupBoxRomBrowser.Text = "ROM Browser";
+            // 
+            // textBoxEndAddress
+            // 
+            this.textBoxEndAddress.Location = new System.Drawing.Point(365, 28);
+            this.textBoxEndAddress.Name = "textBoxEndAddress";
+            this.textBoxEndAddress.ReadOnly = true;
+            this.textBoxEndAddress.Size = new System.Drawing.Size(115, 22);
+            this.textBoxEndAddress.TabIndex = 4;
+            // 
+            // textBoxStartAddress
+            // 
+            this.textBoxStartAddress.Location = new System.Drawing.Point(125, 28);
+            this.textBoxStartAddress.Name = "textBoxStartAddress";
+            this.textBoxStartAddress.ReadOnly = true;
+            this.textBoxStartAddress.Size = new System.Drawing.Size(115, 22);
+            this.textBoxStartAddress.TabIndex = 3;
+            // 
+            // pictureBoxBrowser
+            // 
+            this.pictureBoxBrowser.BackColor = System.Drawing.Color.White;
+            this.pictureBoxBrowser.Location = new System.Drawing.Point(19, 55);
+            this.pictureBoxBrowser.Name = "pictureBoxBrowser";
+            this.pictureBoxBrowser.Size = new System.Drawing.Size(461, 148);
+            this.pictureBoxBrowser.TabIndex = 2;
+            this.pictureBoxBrowser.TabStop = false;
+            this.pictureBoxBrowser.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxBrowser_Paint);
+            this.pictureBoxBrowser.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxBrowser_MouseUp);
+            // 
+            // labelEndAddress
+            // 
+            this.labelEndAddress.Location = new System.Drawing.Point(259, 28);
+            this.labelEndAddress.Name = "labelEndAddress";
+            this.labelEndAddress.Size = new System.Drawing.Size(96, 23);
+            this.labelEndAddress.TabIndex = 1;
+            this.labelEndAddress.Text = "End Address:";
+            this.labelEndAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelStartingAddress
+            // 
+            this.labelStartingAddress.Location = new System.Drawing.Point(19, 28);
+            this.labelStartingAddress.Name = "labelStartingAddress";
+            this.labelStartingAddress.Size = new System.Drawing.Size(96, 23);
+            this.labelStartingAddress.TabIndex = 0;
+            this.labelStartingAddress.Text = "Start Address:";
+            this.labelStartingAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // groupBoxSelectedTile
+            // 
+            this.groupBoxSelectedTile.Controls.Add(this.comboBoxPaletteEntry);
+            this.groupBoxSelectedTile.Controls.Add(this.labelPaletteEntry);
+            this.groupBoxSelectedTile.Controls.Add(this.labelPixelXY);
+            this.groupBoxSelectedTile.Controls.Add(this.labelPixel);
+            this.groupBoxSelectedTile.Controls.Add(this.pictureBoxSelectedTile);
+            this.groupBoxSelectedTile.Location = new System.Drawing.Point(518, 18);
+            this.groupBoxSelectedTile.Name = "groupBoxSelectedTile";
+            this.groupBoxSelectedTile.Size = new System.Drawing.Size(219, 250);
+            this.groupBoxSelectedTile.TabIndex = 1;
+            this.groupBoxSelectedTile.TabStop = false;
+            this.groupBoxSelectedTile.Text = "Selected Tile";
+            // 
+            // comboBoxPaletteEntry
+            // 
+            this.comboBoxPaletteEntry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPaletteEntry.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15"});
+            this.comboBoxPaletteEntry.Location = new System.Drawing.Point(102, 211);
+            this.comboBoxPaletteEntry.Name = "comboBoxPaletteEntry";
+            this.comboBoxPaletteEntry.Size = new System.Drawing.Size(111, 24);
+            this.comboBoxPaletteEntry.TabIndex = 19;
+            // 
+            // labelPaletteEntry
+            // 
+            this.labelPaletteEntry.Location = new System.Drawing.Point(19, 212);
+            this.labelPaletteEntry.Name = "labelPaletteEntry";
+            this.labelPaletteEntry.Size = new System.Drawing.Size(77, 23);
+            this.labelPaletteEntry.TabIndex = 3;
+            this.labelPaletteEntry.Text = "Pen Color:";
+            this.labelPaletteEntry.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // labelPixelXY
+            // 
+            this.labelPixelXY.Location = new System.Drawing.Point(99, 178);
+            this.labelPixelXY.Name = "labelPixelXY";
+            this.labelPixelXY.Size = new System.Drawing.Size(114, 25);
+            this.labelPixelXY.TabIndex = 2;
+            // 
+            // labelPixel
+            // 
+            this.labelPixel.Location = new System.Drawing.Point(19, 185);
+            this.labelPixel.Name = "labelPixel";
+            this.labelPixel.Size = new System.Drawing.Size(77, 18);
+            this.labelPixel.TabIndex = 1;
+            this.labelPixel.Text = "Pixel Data:";
+            this.labelPixel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pictureBoxSelectedTile
+            // 
+            this.pictureBoxSelectedTile.BackColor = System.Drawing.Color.White;
+            this.pictureBoxSelectedTile.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.pictureBoxSelectedTile.Location = new System.Drawing.Point(35, 28);
+            this.pictureBoxSelectedTile.Name = "pictureBoxSelectedTile";
+            this.pictureBoxSelectedTile.Size = new System.Drawing.Size(154, 147);
+            this.pictureBoxSelectedTile.TabIndex = 0;
+            this.pictureBoxSelectedTile.TabStop = false;
+            this.pictureBoxSelectedTile.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxSelectedTile_Paint);
+            this.pictureBoxSelectedTile.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBoxSelectedTile_MouseMove);
+            this.pictureBoxSelectedTile.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBoxSelectedTile_MouseUp);
+            // 
+            // groupBoxPalette
+            // 
+            this.groupBoxPalette.Controls.Add(this.comboBoxPalettes);
+            this.groupBoxPalette.Controls.Add(this.labelPalettes);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette0);
+            this.groupBoxPalette.Controls.Add(this.buttonGridLines);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette15);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette14);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette13);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette12);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette11);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette10);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette9);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette8);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette7);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette6);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette5);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette4);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette3);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette2);
+            this.groupBoxPalette.Controls.Add(this.buttonPalette1);
+            this.groupBoxPalette.Controls.Add(this.labelPalette);
+            this.groupBoxPalette.Location = new System.Drawing.Point(10, 240);
+            this.groupBoxPalette.Name = "groupBoxPalette";
+            this.groupBoxPalette.Size = new System.Drawing.Size(499, 166);
+            this.groupBoxPalette.TabIndex = 2;
+            this.groupBoxPalette.TabStop = false;
+            this.groupBoxPalette.Text = "Palette";
+            // 
+            // comboBoxPalettes
+            // 
+            this.comboBoxPalettes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxPalettes.Enabled = false;
+            this.comboBoxPalettes.Location = new System.Drawing.Point(163, 102);
+            this.comboBoxPalettes.Name = "comboBoxPalettes";
+            this.comboBoxPalettes.Size = new System.Drawing.Size(317, 24);
+            this.comboBoxPalettes.TabIndex = 20;
+            this.comboBoxPalettes.SelectedIndexChanged += new System.EventHandler(this.comboBoxPalettes_SelectedIndexChanged);
+            // 
+            // labelPalettes
+            // 
+            this.labelPalettes.Location = new System.Drawing.Point(19, 102);
+            this.labelPalettes.Name = "labelPalettes";
+            this.labelPalettes.Size = new System.Drawing.Size(135, 24);
+            this.labelPalettes.TabIndex = 19;
+            this.labelPalettes.Text = "Use palette in ROM:";
+            this.labelPalettes.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // buttonPalette0
+            // 
+            this.buttonPalette0.BackColor = System.Drawing.Color.Black;
+            this.buttonPalette0.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette0.ForeColor = System.Drawing.Color.White;
+            this.buttonPalette0.Location = new System.Drawing.Point(19, 18);
+            this.buttonPalette0.Name = "buttonPalette0";
+            this.buttonPalette0.Size = new System.Drawing.Size(39, 37);
+            this.buttonPalette0.TabIndex = 1;
+            this.buttonPalette0.Text = "0";
+            this.buttonPalette0.UseVisualStyleBackColor = false;
+            this.buttonPalette0.BackColorChanged += new System.EventHandler(this.buttonPalette0_BackColorChanged);
+            this.buttonPalette0.Click += new System.EventHandler(this.buttonPalette0_Click);
+            // 
+            // buttonGridLines
+            // 
+            this.buttonGridLines.BackColor = System.Drawing.Color.White;
+            this.buttonGridLines.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonGridLines.ForeColor = System.Drawing.Color.Black;
+            this.buttonGridLines.Location = new System.Drawing.Point(336, 55);
+            this.buttonGridLines.Name = "buttonGridLines";
+            this.buttonGridLines.Size = new System.Drawing.Size(144, 37);
+            this.buttonGridLines.TabIndex = 18;
+            this.buttonGridLines.Text = "Gridlines";
+            this.buttonGridLines.UseVisualStyleBackColor = false;
+            this.buttonGridLines.Click += new System.EventHandler(this.buttonGridLines_Click);
+            // 
+            // buttonPalette15
+            // 
+            this.buttonPalette15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.buttonPalette15.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette15.Location = new System.Drawing.Point(288, 55);
+            this.buttonPalette15.Name = "buttonPalette15";
+            this.buttonPalette15.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette15.TabIndex = 16;
+            this.buttonPalette15.Text = "15";
+            this.buttonPalette15.UseVisualStyleBackColor = false;
+            this.buttonPalette15.BackColorChanged += new System.EventHandler(this.buttonPalette15_BackColorChanged);
+            this.buttonPalette15.Click += new System.EventHandler(this.buttonPalette15_Click);
+            // 
+            // buttonPalette14
+            // 
+            this.buttonPalette14.BackColor = System.Drawing.Color.Blue;
+            this.buttonPalette14.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette14.Location = new System.Drawing.Point(250, 55);
+            this.buttonPalette14.Name = "buttonPalette14";
+            this.buttonPalette14.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette14.TabIndex = 15;
+            this.buttonPalette14.Text = "14";
+            this.buttonPalette14.UseVisualStyleBackColor = false;
+            this.buttonPalette14.BackColorChanged += new System.EventHandler(this.buttonPalette14_BackColorChanged);
+            this.buttonPalette14.Click += new System.EventHandler(this.buttonPalette14_Click);
+            // 
+            // buttonPalette13
+            // 
+            this.buttonPalette13.BackColor = System.Drawing.Color.Teal;
+            this.buttonPalette13.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette13.Location = new System.Drawing.Point(211, 55);
+            this.buttonPalette13.Name = "buttonPalette13";
+            this.buttonPalette13.Size = new System.Drawing.Size(39, 37);
+            this.buttonPalette13.TabIndex = 14;
+            this.buttonPalette13.Text = "13";
+            this.buttonPalette13.UseVisualStyleBackColor = false;
+            this.buttonPalette13.BackColorChanged += new System.EventHandler(this.buttonPalette13_BackColorChanged);
+            this.buttonPalette13.Click += new System.EventHandler(this.buttonPalette13_Click);
+            // 
+            // buttonPalette12
+            // 
+            this.buttonPalette12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.buttonPalette12.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette12.Location = new System.Drawing.Point(173, 55);
+            this.buttonPalette12.Name = "buttonPalette12";
+            this.buttonPalette12.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette12.TabIndex = 13;
+            this.buttonPalette12.Text = "12";
+            this.buttonPalette12.UseVisualStyleBackColor = false;
+            this.buttonPalette12.BackColorChanged += new System.EventHandler(this.buttonPalette12_BackColorChanged);
+            this.buttonPalette12.Click += new System.EventHandler(this.buttonPalette12_Click);
+            // 
+            // buttonPalette11
+            // 
+            this.buttonPalette11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.buttonPalette11.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette11.Location = new System.Drawing.Point(134, 55);
+            this.buttonPalette11.Name = "buttonPalette11";
+            this.buttonPalette11.Size = new System.Drawing.Size(39, 37);
+            this.buttonPalette11.TabIndex = 12;
+            this.buttonPalette11.Text = "11";
+            this.buttonPalette11.UseVisualStyleBackColor = false;
+            this.buttonPalette11.BackColorChanged += new System.EventHandler(this.buttonPalette11_BackColorChanged);
+            this.buttonPalette11.Click += new System.EventHandler(this.buttonPalette11_Click);
+            // 
+            // buttonPalette10
+            // 
+            this.buttonPalette10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.buttonPalette10.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette10.Location = new System.Drawing.Point(96, 55);
+            this.buttonPalette10.Name = "buttonPalette10";
+            this.buttonPalette10.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette10.TabIndex = 11;
+            this.buttonPalette10.Text = "10";
+            this.buttonPalette10.UseVisualStyleBackColor = false;
+            this.buttonPalette10.BackColorChanged += new System.EventHandler(this.buttonPalette10_BackColorChanged);
+            this.buttonPalette10.Click += new System.EventHandler(this.buttonPalette10_Click);
+            // 
+            // buttonPalette9
+            // 
+            this.buttonPalette9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.buttonPalette9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette9.Location = new System.Drawing.Point(58, 55);
+            this.buttonPalette9.Name = "buttonPalette9";
+            this.buttonPalette9.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette9.TabIndex = 10;
+            this.buttonPalette9.Text = "9";
+            this.buttonPalette9.UseVisualStyleBackColor = false;
+            this.buttonPalette9.BackColorChanged += new System.EventHandler(this.buttonPalette9_BackColorChanged);
+            this.buttonPalette9.Click += new System.EventHandler(this.buttonPalette9_Click);
+            // 
+            // buttonPalette8
+            // 
+            this.buttonPalette8.BackColor = System.Drawing.Color.Silver;
+            this.buttonPalette8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette8.Location = new System.Drawing.Point(19, 55);
+            this.buttonPalette8.Name = "buttonPalette8";
+            this.buttonPalette8.Size = new System.Drawing.Size(39, 37);
+            this.buttonPalette8.TabIndex = 9;
+            this.buttonPalette8.Text = "8";
+            this.buttonPalette8.UseVisualStyleBackColor = false;
+            this.buttonPalette8.BackColorChanged += new System.EventHandler(this.buttonPalette8_BackColorChanged);
+            this.buttonPalette8.Click += new System.EventHandler(this.buttonPalette8_Click);
+            // 
+            // buttonPalette7
+            // 
+            this.buttonPalette7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.buttonPalette7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette7.Location = new System.Drawing.Point(288, 18);
+            this.buttonPalette7.Name = "buttonPalette7";
+            this.buttonPalette7.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette7.TabIndex = 8;
+            this.buttonPalette7.Text = "7";
+            this.buttonPalette7.UseVisualStyleBackColor = false;
+            this.buttonPalette7.BackColorChanged += new System.EventHandler(this.buttonPalette7_BackColorChanged);
+            this.buttonPalette7.Click += new System.EventHandler(this.buttonPalette7_Click);
+            // 
+            // buttonPalette6
+            // 
+            this.buttonPalette6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.buttonPalette6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette6.Location = new System.Drawing.Point(250, 18);
+            this.buttonPalette6.Name = "buttonPalette6";
+            this.buttonPalette6.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette6.TabIndex = 7;
+            this.buttonPalette6.Text = "6";
+            this.buttonPalette6.UseVisualStyleBackColor = false;
+            this.buttonPalette6.BackColorChanged += new System.EventHandler(this.buttonPalette6_BackColorChanged);
+            this.buttonPalette6.Click += new System.EventHandler(this.buttonPalette6_Click);
+            // 
+            // buttonPalette5
+            // 
+            this.buttonPalette5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.buttonPalette5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette5.Location = new System.Drawing.Point(211, 18);
+            this.buttonPalette5.Name = "buttonPalette5";
+            this.buttonPalette5.Size = new System.Drawing.Size(39, 37);
+            this.buttonPalette5.TabIndex = 6;
+            this.buttonPalette5.Text = "5";
+            this.buttonPalette5.UseVisualStyleBackColor = false;
+            this.buttonPalette5.BackColorChanged += new System.EventHandler(this.buttonPalette5_BackColorChanged);
+            this.buttonPalette5.Click += new System.EventHandler(this.buttonPalette5_Click);
+            // 
+            // buttonPalette4
+            // 
+            this.buttonPalette4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.buttonPalette4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette4.Location = new System.Drawing.Point(173, 18);
+            this.buttonPalette4.Name = "buttonPalette4";
+            this.buttonPalette4.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette4.TabIndex = 5;
+            this.buttonPalette4.Text = "4";
+            this.buttonPalette4.UseVisualStyleBackColor = false;
+            this.buttonPalette4.BackColorChanged += new System.EventHandler(this.buttonPalette4_BackColorChanged);
+            this.buttonPalette4.Click += new System.EventHandler(this.buttonPalette4_Click);
+            // 
+            // buttonPalette3
+            // 
+            this.buttonPalette3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.buttonPalette3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette3.Location = new System.Drawing.Point(134, 18);
+            this.buttonPalette3.Name = "buttonPalette3";
+            this.buttonPalette3.Size = new System.Drawing.Size(39, 37);
+            this.buttonPalette3.TabIndex = 4;
+            this.buttonPalette3.Text = "3";
+            this.buttonPalette3.UseVisualStyleBackColor = false;
+            this.buttonPalette3.BackColorChanged += new System.EventHandler(this.buttonPalette3_BackColorChanged);
+            this.buttonPalette3.Click += new System.EventHandler(this.buttonPalette3_Click);
+            // 
+            // buttonPalette2
+            // 
+            this.buttonPalette2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.buttonPalette2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette2.Location = new System.Drawing.Point(96, 18);
+            this.buttonPalette2.Name = "buttonPalette2";
+            this.buttonPalette2.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette2.TabIndex = 3;
+            this.buttonPalette2.Text = "2";
+            this.buttonPalette2.UseVisualStyleBackColor = false;
+            this.buttonPalette2.BackColorChanged += new System.EventHandler(this.buttonPalette2_BackColorChanged);
+            this.buttonPalette2.Click += new System.EventHandler(this.buttonPalette2_Click);
+            // 
+            // buttonPalette1
+            // 
+            this.buttonPalette1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.buttonPalette1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonPalette1.Location = new System.Drawing.Point(58, 18);
+            this.buttonPalette1.Name = "buttonPalette1";
+            this.buttonPalette1.Size = new System.Drawing.Size(38, 37);
+            this.buttonPalette1.TabIndex = 2;
+            this.buttonPalette1.Text = "1";
+            this.buttonPalette1.UseVisualStyleBackColor = false;
+            this.buttonPalette1.BackColorChanged += new System.EventHandler(this.buttonPalette1_BackColorChanged);
+            this.buttonPalette1.Click += new System.EventHandler(this.buttonPalette1_Click);
+            // 
+            // labelPalette
+            // 
+            this.labelPalette.Location = new System.Drawing.Point(10, 138);
+            this.labelPalette.Name = "labelPalette";
+            this.labelPalette.Size = new System.Drawing.Size(470, 19);
+            this.labelPalette.TabIndex = 0;
+            this.labelPalette.Text = "Palette is for preview purposes, this does not affect what is saved to the ROM";
+            // 
+            // colorDialog
+            // 
+            this.colorDialog.FullOpen = true;
+            // 
+            // buttonExit
+            // 
+            this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonExit.Location = new System.Drawing.Point(518, 323);
+            this.buttonExit.Name = "buttonExit";
+            this.buttonExit.Size = new System.Drawing.Size(219, 37);
+            this.buttonExit.TabIndex = 20;
+            this.buttonExit.Text = "Save All Changes and Close";
+            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            // 
+            // buttonCancel
+            // 
+            this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonCancel.Location = new System.Drawing.Point(518, 369);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(219, 37);
+            this.buttonCancel.TabIndex = 21;
+            this.buttonCancel.Text = "Cancel All Changes and Close";
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
+            // TileEditorForm
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+            this.ClientSize = new System.Drawing.Size(776, 435);
+            this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.buttonExit);
+            this.Controls.Add(this.groupBoxPalette);
+            this.Controls.Add(this.groupBoxSelectedTile);
+            this.Controls.Add(this.groupBoxRomBrowser);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.Name = "TileEditorForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Text = "Tile Editor";
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.TileEditorForm_Closing);
+            this.Load += new System.EventHandler(this.TileEditorForm_Load);
+            this.groupBoxRomBrowser.ResumeLayout(false);
+            this.groupBoxRomBrowser.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBrowser)).EndInit();
+            this.groupBoxSelectedTile.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSelectedTile)).EndInit();
+            this.groupBoxPalette.ResumeLayout(false);
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -660,6 +681,10 @@ namespace com.huguesjohnson.TileEditor
 		private void TileEditorForm_Load(object sender, System.EventArgs e)
 		{
 			this.comboBoxPaletteEntry.SelectedIndex=0;
+            Version v=Assembly.GetEntryAssembly().GetName().Version;
+            String major=v.Major.ToString();
+            String minor=v.Minor.ToString();
+            this.Text="Tile Editor "+major+"."+minor;
 		}
 
 		private void pictureBoxBrowser_Paint(object sender, System.Windows.Forms.PaintEventArgs e)

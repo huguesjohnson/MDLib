@@ -5,7 +5,7 @@ using System.Text;
 
 namespace com.huguesjohnson.MegaDriveIO
 {
-    interface IMegaDriveIO
+    public interface IMegaDriveIO
     {
         /// <summary>
 		/// Write a string value to the rom image.

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace com.huguesjohnson.MegaDriveIO
 {
-    public interface IMegaDriveIO
+    public interface IMegaDriveIO:IDisposable
     {
         /// <summary>
 		/// Write a string value to the rom image.
@@ -101,6 +101,16 @@ namespace com.huguesjohnson.MegaDriveIO
 		MDTile readTile(int offset,int xDimension,int yDimension);
 
 		/// <summary>
+		/// Read a tile from the ROM image.
+		/// </summary>
+		/// <param name="offset">The address to start at.</param>
+		/// <param name="offset">The address to end at.</param>
+		/// <param name="xDimension">The xDimension (width) of the tile.</param>
+		/// <param name="yDimension">The yDimension (height) of the tile.</param>
+		/// <returns></returns>
+		MDTile[] readTiles(int startOffset,int endOffset,int xDimension,int yDimension);
+        
+        /// <summary>
 		/// Saves a set of tiles to the ROM image.
 		/// </summary>
 		/// <param name="tiles">The set of tiles to save.</param>

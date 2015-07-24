@@ -471,7 +471,7 @@ namespace com.huguesjohnson.PaletteEditor
             this.buttonCancelAndClose.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonCancelAndClose.Location = new System.Drawing.Point(163, 406);
             this.buttonCancelAndClose.Name = "buttonCancelAndClose";
-            this.buttonCancelAndClose.Size = new System.Drawing.Size(202, 37);
+            this.buttonCancelAndClose.Size = new System.Drawing.Size(202, 47);
             this.buttonCancelAndClose.TabIndex = 23;
             this.buttonCancelAndClose.Text = "Cancel All Changes and Close";
             this.buttonCancelAndClose.Click += new System.EventHandler(this.buttonCancelAndClose_Click);
@@ -479,9 +479,9 @@ namespace com.huguesjohnson.PaletteEditor
             // buttonSaveAndClose
             // 
             this.buttonSaveAndClose.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.buttonSaveAndClose.Location = new System.Drawing.Point(163, 360);
+            this.buttonSaveAndClose.Location = new System.Drawing.Point(163, 353);
             this.buttonSaveAndClose.Name = "buttonSaveAndClose";
-            this.buttonSaveAndClose.Size = new System.Drawing.Size(202, 37);
+            this.buttonSaveAndClose.Size = new System.Drawing.Size(202, 47);
             this.buttonSaveAndClose.TabIndex = 22;
             this.buttonSaveAndClose.Text = "Save All Changes and Close";
             this.buttonSaveAndClose.Click += new System.EventHandler(this.buttonSaveAndClose_Click);
@@ -489,7 +489,7 @@ namespace com.huguesjohnson.PaletteEditor
             // PaletteEditorForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
-            this.ClientSize = new System.Drawing.Size(400, 476);
+            this.ClientSize = new System.Drawing.Size(383, 477);
             this.Controls.Add(this.buttonCancelAndClose);
             this.Controls.Add(this.buttonSaveAndClose);
             this.Controls.Add(this.groupBoxSelectedEntry);
@@ -674,7 +674,7 @@ namespace com.huguesjohnson.PaletteEditor
 
         private void PaletteEditorForm_Load(object sender,EventArgs e)
         {
-            Version v=Assembly.GetEntryAssembly().GetName().Version;
+            Version v=Assembly.GetExecutingAssembly().GetName().Version;
             String major=v.Major.ToString();
             String minor=v.Minor.ToString();
             this.Text="Palette Editor "+major+"."+minor;

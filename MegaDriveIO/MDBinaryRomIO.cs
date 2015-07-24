@@ -286,6 +286,28 @@ namespace com.huguesjohnson.MegaDriveIO
 			this.writer.Write(bytes,0,length);
 		}
 
+        		/// <summary>
+		/// Read a tile from the ROM image.
+		/// </summary>
+		/// <param name="offset">The address to start at.</param>
+		/// <param name="offset">The address to end at.</param>
+		/// <param name="xDimension">The xDimension (width) of the tiles.</param>
+		/// <param name="yDimension">The yDimension (height) of the tiles.</param>
+		/// <returns></returns>
+        public MDTile[] readTiles(int startOffset,int endOffset,int xDimension,int yDimension) 
+        { 
+            int tileBytes=(xDimension*yDimension)/2; // /2 since there are two tiles stored in each byte
+            int numTiles=((endOffset-startOffset)/tileBytes)+1;
+            MDTile[] tiles=new MDTile[numTiles];
+            int currentOffset=startOffset;
+            for(int tileIndex=0;tileIndex<numTiles;tileIndex++) 
+            { 
+                tiles[tileIndex]=this.readTile(currentOffset,xDimension,yDimension);
+                currentOffset+=tileBytes;
+            }
+            return(tiles);
+        }
+
 		/// <summary>
 		/// Read a tile from the ROM image.
 		/// </summary>

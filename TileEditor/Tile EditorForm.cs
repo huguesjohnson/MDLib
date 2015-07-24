@@ -1,7 +1,7 @@
 /*
 TileEditor: Dialog to edit a 16 color 9-bit RGB palette
 Originally created for Aridia: Phantasy Star III ROM Editor
-Copyright (c) 2007-2010 Hugues Johnson
+Copyright (c) 2007-2015 Hugues Johnson
 
 TileEditor is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2 
@@ -69,7 +69,10 @@ namespace com.huguesjohnson.TileEditor
 		private bool saveOrCancelButtonClicked;
 		private System.Windows.Forms.Button buttonGridLines;
 		private System.Windows.Forms.ColorDialog colorDialog;
-		private const int BROWSER_COLUMNS=24;
+		public const int MAX_BROWSER_COLUMNS=32;
+        public const int MAX_BROWSER_ROWS=16;
+        private int browserColumns=MAX_BROWSER_COLUMNS;
+        private int browserRows=MAX_BROWSER_ROWS;
 		private const int BROWSER_TILE_WIDTH=16;
 		private const int BROWSER_TILE_HEIGHT=16;
 		private const int SELECTED_TILE_PIXEL_WIDTH=16;
@@ -108,6 +111,15 @@ namespace com.huguesjohnson.TileEditor
 			this.textBoxEndAddress.Text=endAddress.ToString();
 			this.saveOrCancelButtonClicked=false;
 			//get the tiles
+			if((this.tiles==null)||(this.tiles.Length<1))
+			{
+				this.tiles=this.romIO.readTiles(startAddress,endAddress,8,8);
+				this.selectedTileIndex=0;
+				this.selectedPixelX=0;
+				this.selectedPixelY=0;
+				this.updateSelectedPixel();
+			}
+            /*
 			int tileCount=((this.endAddress-this.startAddress)/32)+1;
 			if((this.tiles==null)||(this.tiles.Length<1))
 			{
@@ -123,6 +135,7 @@ namespace com.huguesjohnson.TileEditor
 				this.selectedPixelY=0;
 				this.updateSelectedPixel();
 			}
+             */
 			this.comboBoxPalettes.Items.Add(new LookupValue("<custom>",-1));
 		}
 
@@ -143,6 +156,21 @@ namespace com.huguesjohnson.TileEditor
 			}
 			this.comboBoxPalettes.SelectedIndex=0;
 			this.comboBoxPalettes.Enabled=true;
+		}
+
+        		/// <summary>
+		/// Create a new tile editor instance.
+		/// </summary>
+		/// <param name="romIO">The Mega Drive ROM IO to read/write.</param>
+		/// <param name="startAddress">The starting address of the tiles to edit.</param>
+		/// <param name="endAddress">The end address of the tiles to edit.</param>
+		/// <param name="columns">The number of columns to display in the browser. Max is MAX_BROWSER_COLUMNS.</param>
+		/// <param name="rows">The number of row to display in the browser. Max is ROWS.</param>
+		/// <param name="romPalettes">The collection of ROM palettes to load into the combo box.</param>
+		public TileEditorForm(IMegaDriveIO romIO,int startAddress,int endAddress,int columns,int rows,LookupValueCollection romPalettes) : this(romIO,startAddress,endAddress,romPalettes)
+		{
+            this.browserColumns=columns;
+            this.browserRows=rows;
 		}
 
 		/// <summary>
@@ -221,14 +249,14 @@ namespace com.huguesjohnson.TileEditor
             this.groupBoxRomBrowser.Controls.Add(this.labelStartingAddress);
             this.groupBoxRomBrowser.Location = new System.Drawing.Point(10, 18);
             this.groupBoxRomBrowser.Name = "groupBoxRomBrowser";
-            this.groupBoxRomBrowser.Size = new System.Drawing.Size(499, 213);
+            this.groupBoxRomBrowser.Size = new System.Drawing.Size(544, 323);
             this.groupBoxRomBrowser.TabIndex = 0;
             this.groupBoxRomBrowser.TabStop = false;
-            this.groupBoxRomBrowser.Text = "ROM Browser";
+            this.groupBoxRomBrowser.Text = "Image Browser";
             // 
             // textBoxEndAddress
             // 
-            this.textBoxEndAddress.Location = new System.Drawing.Point(365, 28);
+            this.textBoxEndAddress.Location = new System.Drawing.Point(409, 290);
             this.textBoxEndAddress.Name = "textBoxEndAddress";
             this.textBoxEndAddress.ReadOnly = true;
             this.textBoxEndAddress.Size = new System.Drawing.Size(115, 22);
@@ -236,7 +264,7 @@ namespace com.huguesjohnson.TileEditor
             // 
             // textBoxStartAddress
             // 
-            this.textBoxStartAddress.Location = new System.Drawing.Point(125, 28);
+            this.textBoxStartAddress.Location = new System.Drawing.Point(173, 290);
             this.textBoxStartAddress.Name = "textBoxStartAddress";
             this.textBoxStartAddress.ReadOnly = true;
             this.textBoxStartAddress.Size = new System.Drawing.Size(115, 22);
@@ -245,9 +273,9 @@ namespace com.huguesjohnson.TileEditor
             // pictureBoxBrowser
             // 
             this.pictureBoxBrowser.BackColor = System.Drawing.Color.White;
-            this.pictureBoxBrowser.Location = new System.Drawing.Point(19, 55);
+            this.pictureBoxBrowser.Location = new System.Drawing.Point(13, 28);
             this.pictureBoxBrowser.Name = "pictureBoxBrowser";
-            this.pictureBoxBrowser.Size = new System.Drawing.Size(461, 148);
+            this.pictureBoxBrowser.Size = new System.Drawing.Size(512, 256);
             this.pictureBoxBrowser.TabIndex = 2;
             this.pictureBoxBrowser.TabStop = false;
             this.pictureBoxBrowser.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxBrowser_Paint);
@@ -255,18 +283,18 @@ namespace com.huguesjohnson.TileEditor
             // 
             // labelEndAddress
             // 
-            this.labelEndAddress.Location = new System.Drawing.Point(259, 28);
+            this.labelEndAddress.Location = new System.Drawing.Point(294, 290);
             this.labelEndAddress.Name = "labelEndAddress";
-            this.labelEndAddress.Size = new System.Drawing.Size(96, 23);
+            this.labelEndAddress.Size = new System.Drawing.Size(115, 23);
             this.labelEndAddress.TabIndex = 1;
             this.labelEndAddress.Text = "End Address:";
             this.labelEndAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // labelStartingAddress
             // 
-            this.labelStartingAddress.Location = new System.Drawing.Point(19, 28);
+            this.labelStartingAddress.Location = new System.Drawing.Point(40, 290);
             this.labelStartingAddress.Name = "labelStartingAddress";
-            this.labelStartingAddress.Size = new System.Drawing.Size(96, 23);
+            this.labelStartingAddress.Size = new System.Drawing.Size(127, 23);
             this.labelStartingAddress.TabIndex = 0;
             this.labelStartingAddress.Text = "Start Address:";
             this.labelStartingAddress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -278,7 +306,7 @@ namespace com.huguesjohnson.TileEditor
             this.groupBoxSelectedTile.Controls.Add(this.labelPixelXY);
             this.groupBoxSelectedTile.Controls.Add(this.labelPixel);
             this.groupBoxSelectedTile.Controls.Add(this.pictureBoxSelectedTile);
-            this.groupBoxSelectedTile.Location = new System.Drawing.Point(518, 18);
+            this.groupBoxSelectedTile.Location = new System.Drawing.Point(560, 27);
             this.groupBoxSelectedTile.Name = "groupBoxSelectedTile";
             this.groupBoxSelectedTile.Size = new System.Drawing.Size(219, 250);
             this.groupBoxSelectedTile.TabIndex = 1;
@@ -339,9 +367,9 @@ namespace com.huguesjohnson.TileEditor
             // 
             this.pictureBoxSelectedTile.BackColor = System.Drawing.Color.White;
             this.pictureBoxSelectedTile.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.pictureBoxSelectedTile.Location = new System.Drawing.Point(35, 28);
+            this.pictureBoxSelectedTile.Location = new System.Drawing.Point(48, 28);
             this.pictureBoxSelectedTile.Name = "pictureBoxSelectedTile";
-            this.pictureBoxSelectedTile.Size = new System.Drawing.Size(154, 147);
+            this.pictureBoxSelectedTile.Size = new System.Drawing.Size(128, 128);
             this.pictureBoxSelectedTile.TabIndex = 0;
             this.pictureBoxSelectedTile.TabStop = false;
             this.pictureBoxSelectedTile.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxSelectedTile_Paint);
@@ -370,9 +398,9 @@ namespace com.huguesjohnson.TileEditor
             this.groupBoxPalette.Controls.Add(this.buttonPalette2);
             this.groupBoxPalette.Controls.Add(this.buttonPalette1);
             this.groupBoxPalette.Controls.Add(this.labelPalette);
-            this.groupBoxPalette.Location = new System.Drawing.Point(10, 240);
+            this.groupBoxPalette.Location = new System.Drawing.Point(12, 347);
             this.groupBoxPalette.Name = "groupBoxPalette";
-            this.groupBoxPalette.Size = new System.Drawing.Size(499, 166);
+            this.groupBoxPalette.Size = new System.Drawing.Size(499, 200);
             this.groupBoxPalette.TabIndex = 2;
             this.groupBoxPalette.TabStop = false;
             this.groupBoxPalette.Text = "Palette";
@@ -622,7 +650,7 @@ namespace com.huguesjohnson.TileEditor
             // 
             this.labelPalette.Location = new System.Drawing.Point(10, 138);
             this.labelPalette.Name = "labelPalette";
-            this.labelPalette.Size = new System.Drawing.Size(470, 19);
+            this.labelPalette.Size = new System.Drawing.Size(470, 40);
             this.labelPalette.TabIndex = 0;
             this.labelPalette.Text = "Palette is for preview purposes, this does not affect what is saved to the ROM";
             // 
@@ -633,7 +661,7 @@ namespace com.huguesjohnson.TileEditor
             // buttonExit
             // 
             this.buttonExit.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.buttonExit.Location = new System.Drawing.Point(518, 323);
+            this.buttonExit.Location = new System.Drawing.Point(560, 463);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(219, 37);
             this.buttonExit.TabIndex = 20;
@@ -643,7 +671,7 @@ namespace com.huguesjohnson.TileEditor
             // buttonCancel
             // 
             this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.buttonCancel.Location = new System.Drawing.Point(518, 369);
+            this.buttonCancel.Location = new System.Drawing.Point(560, 508);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(219, 37);
             this.buttonCancel.TabIndex = 21;
@@ -653,7 +681,7 @@ namespace com.huguesjohnson.TileEditor
             // TileEditorForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
-            this.ClientSize = new System.Drawing.Size(776, 435);
+            this.ClientSize = new System.Drawing.Size(788, 554);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.groupBoxPalette);
@@ -681,10 +709,13 @@ namespace com.huguesjohnson.TileEditor
 		private void TileEditorForm_Load(object sender, System.EventArgs e)
 		{
 			this.comboBoxPaletteEntry.SelectedIndex=0;
-            Version v=Assembly.GetEntryAssembly().GetName().Version;
+            Version v=Assembly.GetExecutingAssembly().GetName().Version;
             String major=v.Major.ToString();
             String minor=v.Minor.ToString();
             this.Text="Tile Editor "+major+"."+minor;
+            //size the browser
+            int width=this.pictureBoxBrowser.Width=this.browserColumns*BROWSER_TILE_WIDTH;
+			int height=this.pictureBoxBrowser.Height=this.browserRows*BROWSER_TILE_HEIGHT;
 		}
 
 		private void pictureBoxBrowser_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
@@ -709,7 +740,7 @@ namespace com.huguesjohnson.TileEditor
 					}
 				}
 				//increment counters
-				if(xCounter==(BROWSER_COLUMNS-1))
+				if(xCounter==(this.browserColumns-1))
 				{ 
 					xCounter=0; 
 					yCounter++;
@@ -903,7 +934,7 @@ namespace com.huguesjohnson.TileEditor
 			//figure out which tile was clicked
             int tileColumn=e.X/BROWSER_TILE_WIDTH;
 			int tileRow=e.Y/BROWSER_TILE_HEIGHT;
-			int selectedTile=tileColumn+(BROWSER_COLUMNS*tileRow);
+			int selectedTile=tileColumn+(this.browserColumns*tileRow);
 			if((selectedTile>=0)&&(selectedTile<this.tiles.Length))
 			{
 				this.selectedTileIndex=selectedTile;

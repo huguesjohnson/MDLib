@@ -1,7 +1,7 @@
 /*
 MegaDriveIO: Utilities to read/write a Mega Drive binary ROM image
 Originally created for Aridia: Phantasy Star III ROM Editor
-Copyright (c) 2007-2010 Hugues Johnson
+Copyright (c) 2007-2015 Hugues Johnson
 
 MegaDriveIO is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2 
@@ -153,20 +153,42 @@ namespace com.huguesjohnson.MegaDriveIO
 			return(Color.FromArgb(255,rgbR,rgbG,rgbB));
 		}
 
+        /// <summary>
+        /// Returns a string containing the binary value of the palette entry.
+        /// </summary>
+        /// <returns>Returns a string containing the binary value of the palette entry.</returns>
+        public string ToBinaryString()
+        {
+            //there's probably a more efficient way to do this but it's a breeze to debug this way
+            string binaryB=Convert.ToString(this.B,2);
+            if(binaryB.Length<3) { binaryB=binaryB.PadLeft(3,'0'); }
+            string binaryG=Convert.ToString(this.G,2);
+            if(binaryG.Length<3) { binaryG=binaryG.PadLeft(3,'0'); }
+            string binaryR=Convert.ToString(this.R,2);
+            if(binaryR.Length<3) { binaryR=binaryR.PadLeft(3,'0'); }
+            string binary=binaryB+"0"+binaryG+"0"+binaryR+"0";
+            return(binary);
+        }
+
+        /// <summary>
+        /// Returns a string containing the hex value of the palette entry.
+        /// </summary>
+        /// <returns>Returns a string containing the hex value of the palette entry.</returns>
+        public string ToHexString()
+        {
+            string binary=this.ToBinaryString();
+            string hex=Convert.ToInt32(binary,2).ToString("X");
+            if(hex.Length<4){hex=hex.PadLeft(4,'0');}
+            return(hex);
+        }
+
 		/// <summary>
 		/// Returns an integer representation of this object.
 		/// </summary>
 		/// <returns>An integer representation of this object.</returns>
 		public ushort ToUInt()
 		{
-			//there's probably a more efficient way to do this but it's a breeze to debug this way
-			string binaryB=Convert.ToString(this.B,2);
-			if(binaryB.Length<3){ binaryB=binaryB.PadLeft(3,'0'); }
-			string binaryG=Convert.ToString(this.G,2);
-			if(binaryG.Length<3){ binaryG=binaryG.PadLeft(3,'0'); }
-			string binaryR=Convert.ToString(this.R,2);
-			if(binaryR.Length<3){ binaryR=binaryR.PadLeft(3,'0'); }
-			string binary=binaryB+"0"+binaryG+"0"+binaryR+"0";
+            string binary=this.ToBinaryString();
 			ushort toUInt=0;
 			for(int index=0;index<12;index++)
 			{

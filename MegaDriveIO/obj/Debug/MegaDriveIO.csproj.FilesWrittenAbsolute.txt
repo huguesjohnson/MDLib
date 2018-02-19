@@ -3,3 +3,8 @@
 /media/hugues/Kakariko Village/Projects/MDLib/MegaDriveIO/bin/Debug/MegaDriveIO.dll
 /media/hugues/Kakariko Village/Projects/MDLib/MegaDriveIO/obj/Debug/MegaDriveIO.dll
 /media/hugues/Kakariko Village/Projects/MDLib/MegaDriveIO/obj/Debug/MegaDriveIO.dll.mdb
+/media/hugues/Kakariko Village/git/MDLib/MegaDriveIO/bin/Debug/MegaDriveIO.dll.mdb
+/media/hugues/Kakariko Village/git/MDLib/MegaDriveIO/bin/Debug/MegaDriveIO.dll
+/media/hugues/Kakariko Village/git/MDLib/MegaDriveIO/obj/Debug/MegaDriveIO.dll
+/media/hugues/Kakariko Village/git/MDLib/MegaDriveIO/obj/Debug/MegaDriveIO.dll.mdb
+/media/hugues/Kakariko Village/git/MDLib/MegaDriveIO/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs

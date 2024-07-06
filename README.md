@@ -10,3 +10,5 @@ MegaDriveIO - contains all the basic input/output methods to modify a ROM image.
 PaletteEditor - UI to edit palettes stored in a ROM image.
 
 TileEditor - UI to edit tiles stored in a ROM image.
+
+This project is archived because I decided to go a different direction with these tools.
